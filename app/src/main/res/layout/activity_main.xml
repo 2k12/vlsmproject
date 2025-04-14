@@ -6,8 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#F9FAFB">
+    android:background="#F9FAFB"
+    android:gravity="center_vertical"> <!-- Centrado verticalmente -->
 
+    <!-- Título centrado -->
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -18,7 +20,7 @@
         android:textStyle="bold"
         android:gravity="center" />
 
-
+    <!-- Versión centrado -->
     <TextView
         android:id="@+id/version"
         android:layout_width="match_parent"
@@ -29,6 +31,16 @@
         android:layout_marginBottom="16dp"
         android:gravity="center" />
 
+    <!-- Label y Campo de IP centrado -->
+    <TextView
+        android:id="@+id/labelIp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hover_ip_base"
+        android:textColor="#2563EB"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:gravity="start" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ipInputLayout"
@@ -49,6 +61,16 @@
             android:background="@drawable/input_background" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Label y Campo de Máscara centrado -->
+    <TextView
+        android:id="@+id/labelMask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hover_mascara_ini"
+        android:textColor="#2563EB"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:gravity="start" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/maskInputLayout"
@@ -69,6 +91,16 @@
             android:background="@drawable/input_background" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Label y Campo de Subredes centrado -->
+    <TextView
+        android:id="@+id/labelNumSubnets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hover_num_sr"
+        android:textColor="#2563EB"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:gravity="start" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/numSubnetsInputLayout"
@@ -89,7 +121,7 @@
             android:background="@drawable/input_background" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
+    <!-- Botón de Generar -->
     <Button
         android:id="@+id/generateFieldsButton"
         android:layout_width="match_parent"
@@ -99,15 +131,15 @@
         android:backgroundTint="#2563EB"
         android:layout_marginBottom="16dp" />
 
-
-
-
+    <!-- Contenedor de hosts centrado -->
     <LinearLayout
         android:id="@+id/hostsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:gravity="center_vertical" />
 
+    <!-- Botón de volver al paso 1 -->
     <Button
         android:id="@+id/backToStepOneButton"
         android:layout_width="match_parent"
@@ -118,6 +150,7 @@
         android:backgroundTint="#EF4444"
         android:visibility="gone" />
 
+    <!-- Botón de Calcular -->
     <Button
         android:id="@+id/calculateButton"
         android:layout_width="match_parent"
@@ -127,6 +160,7 @@
         android:textColor="#FFF"
         android:backgroundTint="#2563EB" />
 
+    <!-- ScrollView para resultados -->
     <ScrollView
         android:id="@+id/resultsScroll"
         android:layout_width="match_parent"

@@ -27,6 +27,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var newCalculationButton: Button
 
 
+    private lateinit var labelIp : TextView
+    private lateinit var labelMask : TextView
+    private lateinit var labelNumSubnets : TextView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,6 +44,10 @@ class MainActivity : AppCompatActivity() {
         calculateButton = findViewById(R.id.calculateButton)
         resultOutput = findViewById(R.id.resultOutput)
         hostsContainer = findViewById(R.id.hostsContainer)
+
+        labelIp = findViewById(R.id.labelIp)
+        labelMask = findViewById(R.id.labelMask)
+        labelNumSubnets = findViewById(R.id.labelNumSubnets)
 
         // Layouts
         ipInputLayout = findViewById(R.id.ipInputLayout)
@@ -104,6 +113,10 @@ class MainActivity : AppCompatActivity() {
 
         backToStepOneButton.visibility = Button.VISIBLE
 
+        labelNumSubnets.visibility = TextView.GONE
+        labelMask.visibility = TextView.GONE
+        labelIp.visibility = TextView.GONE
+
 
     }
 
@@ -113,7 +126,13 @@ class MainActivity : AppCompatActivity() {
         val numSubnets = numSubnetsInput.text.toString().toIntOrNull()
 
         if (mask == null || numSubnets == null || !ipValida(ipStr)) {
-            resultOutput.text = "Por favor, ingresa datos válidos."
+            Toast.makeText(this, "Por favor, ingresa datos válidos.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (mask < 8 || mask > 32) {
+            Toast.makeText(this, "La máscara debe estar entre /8 y /32.", Toast.LENGTH_SHORT).show()
+
             return
         }
 
@@ -122,10 +141,48 @@ class MainActivity : AppCompatActivity() {
             val field = hostsContainer.findViewById<EditText>(1000 + i)
             val hosts = field.text.toString().toIntOrNull()
             if (hosts == null || hosts <= 0) {
-                resultOutput.text = "Por favor, ingresa un número válido de hosts para la subred $i."
+                Toast.makeText(this, "Por favor, ingresa un número válido de hosts para la subred $i.", Toast.LENGTH_SHORT).show()
                 return
             }
+
+            val bitsHost = ceil(log2(hosts + 2.0)).toInt()
+            if (32 - bitsHost < mask) {
+                Toast.makeText(this, "La máscara /$mask no es suficiente para $hosts hosts en la subred $i.", Toast.LENGTH_SHORT).show()
+                return
+            }
+
             hostsList.add(Pair(i, hosts))
+        }
+
+        val maxSubnets = 2.0.pow(32 - mask).toInt() - 2
+        if (numSubnets > maxSubnets) {
+            Toast.makeText(this, "La máscara /$mask solo permite un máximo de $maxSubnets subredes.", Toast.LENGTH_SHORT).show()
+
+            return
+        }
+
+        if (hostsList.any { it.second <= 0 }) {
+            Toast.makeText(this, "El número de hosts no puede ser negativo o cero.", Toast.LENGTH_SHORT).show()
+
+            return
+        }
+
+        if (!ipValida(ipStr)) {
+            Toast.makeText(this, "La IP ingresada no es válida.", Toast.LENGTH_SHORT).show()
+
+            return
+        }
+
+        val ipParts = ipStr.split(".")
+        if (ipParts.size != 4 || ipParts.any { it.toIntOrNull() !in 0..255 }) {
+            Toast.makeText(this, "La IP ingresada no es válida.", Toast.LENGTH_SHORT).show()
+
+            return
+        }
+
+        if (mask == 33) {
+            Toast.makeText(this, "La máscara /33 no es válida.", Toast.LENGTH_SHORT).show()
+            return
         }
 
         val sortedHostsList = hostsList.sortedByDescending { it.second }
@@ -154,13 +211,16 @@ class MainActivity : AppCompatActivity() {
             currentIp = broadcast + 1
         }
 
-        // PASO 3: Mostrar resultados
         hostsContainer.visibility = LinearLayout.GONE
         calculateButton.visibility = Button.GONE
         resultsScroll.visibility = ScrollView.VISIBLE
         newCalculationButton.visibility = Button.VISIBLE
         resultOutput.text = resultado.toString()
         backToStepOneButton.visibility = Button.GONE
+
+        labelNumSubnets.visibility = TextView.GONE
+        labelMask.visibility = TextView.GONE
+        labelIp.visibility = TextView.GONE
     }
 
     private fun ipValida(ip: String): Boolean {
@@ -201,6 +261,10 @@ class MainActivity : AppCompatActivity() {
         backToStepOneButton.visibility = Button.GONE
         newCalculationButton.visibility = Button.GONE
 
+        labelNumSubnets.visibility = TextView.GONE
+        labelMask.visibility = TextView.GONE
+        labelIp.visibility = TextView.GONE
+
     }
 
     private fun reiniciarTodo() {
@@ -217,7 +281,11 @@ class MainActivity : AppCompatActivity() {
         numSubnetsInputLayout.visibility = LinearLayout.VISIBLE
         generateFieldsButton.visibility = Button.VISIBLE
 
-        // Ocultar todo lo demás
+        labelNumSubnets.visibility = TextView.VISIBLE
+        labelMask.visibility = TextView.VISIBLE
+        labelIp.visibility = TextView.VISIBLE
+
+        // Ocultar todo lo demas
         hostsContainer.visibility = LinearLayout.GONE
         calculateButton.visibility = Button.GONE
         resultsScroll.visibility = ScrollView.GONE
