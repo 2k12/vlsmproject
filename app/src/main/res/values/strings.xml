@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">CalculadoraVLSM</string>
+    <string name="calcular">Calcular Subredes</string>
+    <string name="generar">Generar campos de hosts</string>
+    <string name="hover_num_sr">Número de subredes</string>
+    <string name="hover_mascara_ini">Máscara inicial (ej: 24)</string>
+    <string name="hover_ip_base">IP base (ej: 192.168.1.0)</string>
+    <string name="tittle">VLSM Calc</string>
+    <string name="version">V.1.0.0</string>
+    <string name="new_cal">Nuevo cálculo</string>
+    <string name="btn_return">Regresar</string>
 </resources>
